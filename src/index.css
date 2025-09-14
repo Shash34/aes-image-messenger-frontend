@@ -103,7 +103,9 @@ body {
 
 .encrypt-message button.encrypt:hover,
 .decrypt-message button.decrypt:hover {
-  background-color: #3a2323;
+  background-color: white;
+  color: #4b2e2e; /* brown text */
+  border: 2px solid #4b2e2e; /* brown outline */
 }
 
 /* Image preview */
@@ -160,5 +162,7 @@ body {
 }
 
 .encrypt-download:hover {
-  background-color: #3a2323;
+  background-color: white;
+  color: #4b2e2e; /* brown text */
+  border: 2px solid #4b2e2e; /* brown outline */
 }

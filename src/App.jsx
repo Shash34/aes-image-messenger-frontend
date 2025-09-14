@@ -75,7 +75,7 @@ function App() {
   return (
     <div>
       <header className="app-header">
-        <h1>AES Image Messenger 🔒</h1>
+        <h1>AES Image Messenger</h1>
       </header>
 
       <main className="app-main">
