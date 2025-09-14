@@ -1,5 +1,5 @@
 import { useState } from "react";
-import "./App.css"; // make sure your CSS includes modal & form styles
+import "./App.css"; // make sure your CSS has modal styles
 
 function App() {
   const [encFile, setEncFile] = useState(null);
@@ -15,23 +15,18 @@ function App() {
   const [decryptedMessage, setDecryptedMessage] = useState(null);
   const [showModal, setShowModal] = useState(false);
 
-  // Handle encrypt file selection
   const handleEncFileChange = (e) => {
     const file = e.target.files[0];
     setEncFile(file);
-    if (file) setEncPreview(URL.createObjectURL(file));
-    else setEncPreview(null);
+    setEncPreview(file ? URL.createObjectURL(file) : null);
   };
 
-  // Handle decrypt file selection
   const handleDecFileChange = (e) => {
     const file = e.target.files[0];
     setDecFile(file);
-    if (file) setDecPreview(URL.createObjectURL(file));
-    else setDecPreview(null);
+    setDecPreview(file ? URL.createObjectURL(file) : null);
   };
 
-  // Encryption
   const handleEncrypt = async (e) => {
     e.preventDefault();
     if (!encFile || !encMessage || !encPassword) return;
@@ -42,11 +37,10 @@ function App() {
     formData.append("password", encPassword);
 
     try {
-      const response = await fetch("http://localhost:8000/embed", {
-        method: "POST",
-        body: formData,
-      });
-
+      const response = await fetch(
+        "https://aes-image-messenger-backend.onrender.com/embed",
+        { method: "POST", body: formData }
+      );
       const blob = await response.blob();
       setEncryptedBlob(blob);
       alert("Encryption successful! Click the download button below.");
@@ -56,7 +50,6 @@ function App() {
     }
   };
 
-  // Decryption
   const handleDecrypt = async (e) => {
     e.preventDefault();
     if (!decFile || !decPassword) return;
@@ -66,10 +59,10 @@ function App() {
     formData.append("password", decPassword);
 
     try {
-      const response = await fetch("http://localhost:8000/extract", {
-        method: "POST",
-        body: formData,
-      });
+      const response = await fetch(
+        "https://aes-image-messenger-backend.onrender.com/extract",
+        { method: "POST", body: formData }
+      );
       const data = await response.json();
       setDecryptedMessage(data.message);
       setShowModal(true);
@@ -90,11 +83,13 @@ function App() {
           {/* Encryption Form */}
           <form className="encrypt-message" onSubmit={handleEncrypt}>
             <h2>Encrypt</h2>
+
             <label>
               Select Image:
               <input type="file" accept="image/*" onChange={handleEncFileChange} />
             </label>
             {encPreview && <img src={encPreview} alt="Encrypt Preview" className="image-preview" />}
+
             <label>
               Secret Message:
               <textarea
@@ -103,6 +98,7 @@ function App() {
                 placeholder="Enter your message"
               />
             </label>
+
             <label>
               Password:
               <input
@@ -112,6 +108,8 @@ function App() {
                 placeholder="Enter password"
               />
             </label>
+
+            {/* Encrypt button */}
             <button type="submit" className="encrypt">Encrypt</button>
 
             {/* Download button */}
@@ -137,11 +135,13 @@ function App() {
           {/* Decryption Form */}
           <form className="decrypt-message" onSubmit={handleDecrypt}>
             <h2>Decrypt</h2>
+
             <label>
               Select Encrypted Image:
               <input type="file" accept="image/*" onChange={handleDecFileChange} />
             </label>
             {decPreview && <img src={decPreview} alt="Decrypt Preview" className="image-preview" />}
+
             <label>
               Password:
               <input
@@ -151,6 +151,8 @@ function App() {
                 placeholder="Enter password"
               />
             </label>
+
+            {/* Decrypt button */}
             <button type="submit" className="decrypt">Decrypt</button>
           </form>
         </div>
